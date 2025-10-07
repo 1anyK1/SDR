@@ -1,0 +1,3 @@
+/home/plutoSDR/BochZanSDR/dev/CMakeFiles/main.dir
+/home/plutoSDR/BochZanSDR/dev/CMakeFiles/edit_cache.dir
+/home/plutoSDR/BochZanSDR/dev/CMakeFiles/rebuild_cache.dir
