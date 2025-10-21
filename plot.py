@@ -3,7 +3,7 @@ import math
 import matplotlib.pyplot as plt
 
 # Открываем файл для чтения
-name = "txdata.pcm"
+name = "pcm/txdata.pcm"
 
 data = []
 imag = []
