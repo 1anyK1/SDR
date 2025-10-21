@@ -59,7 +59,7 @@ int main(){
     size_t channels[] = {0};
     // Настройки усилителей на RX\\\\TX
     SoapySDRDevice_setGain(sdr, SOAPY_SDR_RX, channels, 65.0); // Чувствительность приемника
-    SoapySDRDevice_setGain(sdr, SOAPY_SDR_TX, channels, -90.0);// Усиление передатчика
+    SoapySDRDevice_setGain(sdr, SOAPY_SDR_TX, channels, -30.0);// Усиление передатчика
 
     size_t channel_count = sizeof(channels) / sizeof(channels[0]);
     // Формирование потоков для передачи и приема сэмплов
