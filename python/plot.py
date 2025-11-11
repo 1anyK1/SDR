@@ -2,7 +2,6 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-# Открываем файл для чтения
 name = "../pcm/txdata.pcm"
 
 data = []
@@ -30,16 +29,12 @@ with open(name, "rb") as f:
         abs = math.sqrt(imag[i]**2 + real[i]**2)
         absIQ.append(abs)
         
-# Инициализируем список для хранения данных
 
-# fig, axs = plt.subplots(2, 1, layout='constrained')
 plt.figure(1)
-# axs\[1\].plot(count, np.abs(data),  color='grey')  # Используем scatter для диаграммы созвездия
-plt.plot(count,(imag),color='red')  # Используем scatter для диаграммы созвездия
-plt.plot(count,(real), color='blue')  # Используем scatter для диаграммы созвездия
+plt.plot(count,(imag),color='red')
+plt.plot(count,(real), color='blue')  
 plt.show()
 
 plt.figure(2)
-# axs\[1\].plot(count, np.abs(data),  color='grey')  # Используем scatter для диаграммы созвездия
-plt.plot(count,(absIQ),color='purple')  # Используем scatter для диаграммы созвездия
+plt.plot(count,(absIQ),color='purple')  
 plt.show()
