@@ -58,4 +58,5 @@ CMakeFiles/main.dir/main.c.o: /home/plutoSDR/BochZanSDR/dev/main.c \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h /usr/include/complex.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
- /usr/include/x86_64-linux-gnu/bits/cmathcalls.h
+ /usr/include/x86_64-linux-gnu/bits/cmathcalls.h \
+ /home/plutoSDR/BochZanSDR/dev/./include/bpsk.h

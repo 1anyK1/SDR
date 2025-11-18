@@ -2,14 +2,13 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-name = "../pcm/txdata.pcm"
+name = "../pcm/rxdata.pcm"
 
 data = []
 imag = []
 real = []
 count = []
 counter = 0
-absIQ = []
 with open(name, "rb") as f:
     index = 0
     while (byte := f.read(2)):
@@ -25,11 +24,14 @@ with open(name, "rb") as f:
             imag.append(I)
         
         index += 1
-    for i in range(len(imag)):
-        abs = math.sqrt(imag[i]**2 + real[i]**2)
-        absIQ.append(abs)
-        
-plt.figure(1)
-plt.plot(count,(imag),color='red')  
-plt.plot(count,(real), color='blue')  
+
+plt.figure(figsize=(8, 8))
+plt.scatter(real, imag, alpha=0.5, s=10)  
+plt.title("IQ Constellation Diagram")
+plt.xlabel("In-phase (I)")
+plt.ylabel("Quadrature (Q)")
+plt.grid(True)
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+plt.axis('equal')  
 plt.show()
