@@ -2,7 +2,8 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-name = "../pcm/txdata.pcm"
+name = "../pcm/rxdata.pcm"
+
 
 data = []
 imag = []
@@ -37,4 +38,10 @@ plt.show()
 
 plt.figure(2)
 plt.plot(count,(absIQ),color='purple')  
+plt.show()
+
+name2 = np.convolve(real, np.ones(10))
+
+plt.figure(3)
+plt.plot(name2)
 plt.show()

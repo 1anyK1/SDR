@@ -83,18 +83,66 @@ CMakeFiles/main.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/plutoSDR/BochZanSDR/dev/main.c -o CMakeFiles/main.dir/main.c.s
 
+CMakeFiles/main.dir/func/convolve.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/func/convolve.c.o: func/convolve.c
+CMakeFiles/main.dir/func/convolve.c.o: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/plutoSDR/BochZanSDR/dev/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/func/convolve.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/func/convolve.c.o -MF CMakeFiles/main.dir/func/convolve.c.o.d -o CMakeFiles/main.dir/func/convolve.c.o -c /home/plutoSDR/BochZanSDR/dev/func/convolve.c
+
+CMakeFiles/main.dir/func/convolve.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/func/convolve.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/plutoSDR/BochZanSDR/dev/func/convolve.c > CMakeFiles/main.dir/func/convolve.c.i
+
+CMakeFiles/main.dir/func/convolve.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/func/convolve.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/plutoSDR/BochZanSDR/dev/func/convolve.c -o CMakeFiles/main.dir/func/convolve.c.s
+
+CMakeFiles/main.dir/func/to_bpsk.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/func/to_bpsk.c.o: func/to_bpsk.c
+CMakeFiles/main.dir/func/to_bpsk.c.o: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/plutoSDR/BochZanSDR/dev/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/main.dir/func/to_bpsk.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/func/to_bpsk.c.o -MF CMakeFiles/main.dir/func/to_bpsk.c.o.d -o CMakeFiles/main.dir/func/to_bpsk.c.o -c /home/plutoSDR/BochZanSDR/dev/func/to_bpsk.c
+
+CMakeFiles/main.dir/func/to_bpsk.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/func/to_bpsk.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/plutoSDR/BochZanSDR/dev/func/to_bpsk.c > CMakeFiles/main.dir/func/to_bpsk.c.i
+
+CMakeFiles/main.dir/func/to_bpsk.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/func/to_bpsk.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/plutoSDR/BochZanSDR/dev/func/to_bpsk.c -o CMakeFiles/main.dir/func/to_bpsk.c.s
+
+CMakeFiles/main.dir/func/upsampling.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/func/upsampling.c.o: func/upsampling.c
+CMakeFiles/main.dir/func/upsampling.c.o: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/plutoSDR/BochZanSDR/dev/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/main.dir/func/upsampling.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/func/upsampling.c.o -MF CMakeFiles/main.dir/func/upsampling.c.o.d -o CMakeFiles/main.dir/func/upsampling.c.o -c /home/plutoSDR/BochZanSDR/dev/func/upsampling.c
+
+CMakeFiles/main.dir/func/upsampling.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/func/upsampling.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/plutoSDR/BochZanSDR/dev/func/upsampling.c > CMakeFiles/main.dir/func/upsampling.c.i
+
+CMakeFiles/main.dir/func/upsampling.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/func/upsampling.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/plutoSDR/BochZanSDR/dev/func/upsampling.c -o CMakeFiles/main.dir/func/upsampling.c.s
+
 # Object files for target main
 main_OBJECTS = \
-"CMakeFiles/main.dir/main.c.o"
+"CMakeFiles/main.dir/main.c.o" \
+"CMakeFiles/main.dir/func/convolve.c.o" \
+"CMakeFiles/main.dir/func/to_bpsk.c.o" \
+"CMakeFiles/main.dir/func/upsampling.c.o"
 
 # External object files for target main
 main_EXTERNAL_OBJECTS =
 
 main: CMakeFiles/main.dir/main.c.o
+main: CMakeFiles/main.dir/func/convolve.c.o
+main: CMakeFiles/main.dir/func/to_bpsk.c.o
+main: CMakeFiles/main.dir/func/upsampling.c.o
 main: CMakeFiles/main.dir/build.make
 main: /usr/local/lib/libSoapySDR.so.0.8.1
 main: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/plutoSDR/BochZanSDR/dev/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/plutoSDR/BochZanSDR/dev/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

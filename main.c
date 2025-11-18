@@ -4,50 +4,7 @@
 #include <stdlib.h>            //free
 #include <stdint.h>
 #include <complex.h>
-
-int* to_bpsk(int arr[], int len){
-    int *IQ = (int*)malloc(len * 2 * sizeof(int));
-    for(int i = 0; i < len; i++){
-        if(arr[i] == 0){
-            IQ[2*i] = 1;
-        } else{
-            IQ[2*i] = -1;
-        }
-        IQ[2*i+1] = 0;
-    }
-
-    return IQ;
-}
-
-int* upsampling(int arr[], int len, int sampling){
-    int count = 0;
-    int *tx_buff = (int*)malloc(len * sampling * sizeof(int));
-    for (int i = 0; i < len; i+=2){
-        tx_buff[count]=arr[i];
-        count++;
-        for (int j = 0; j < sampling-1; j++){
-            tx_buff[count] = 0;
-            count++;
-        }
-    }
-    return tx_buff;
-}
-
-int* convolve_filter(int signal[], int filter[], int len, int sampling) {
-
-    int sum = 0;
-    int *result = (int*)malloc(len * sampling * sizeof(int));
-    for (int i = 0; i < len;){
-        for(int j = 0; j < sampling; j++){
-            result[i] = filter[j] * signal[i] + sum;
-            sum|=result[i];
-            i++;
-        }
-        sum = 0;
-    }
-
-    return result;
-}
+#include "./include/bpsk.h"
 
 int main(){
 
@@ -70,6 +27,7 @@ int main(){
     int *tx = upsampling(IQ, lenIQ, sampling);
     free(IQ);
     int lenTX = lenIQ * sampling;
+    printf("%d\n", lenTX);
     printf("TX\n");
     for (int i = 0; i < len*sampling; i++){
         printf("%d ", tx[i]);
@@ -130,12 +88,6 @@ int main(){
 
     // Выделяем память под буферы RX и TX
     int16_t rx_buffer[2*rx_mtu];
-
-    // size_t sample_count;
-    // FILE *filename = "./pcm/audio.pcm";
-    // int16_t *samples = read_pcm(filename, &sample_count);
-    // printf("OUR SAMPLE COUNT = %d\n", sample_count);
-
     int16_t tx_buff[2*lenTX];
 
     for(int i = 0; i < lenTX; i++){
@@ -143,8 +95,8 @@ int main(){
         tx_buff[2*i+1] = 0;
     }
 
-    FILE *file1 = fopen("./pcm/txstart.pcm", "w");
-    fwrite(tx_buff, sizeof(int16_t), 2 * lenTX, file1);
+    FILE *file1 = fopen("./pcm/txdata.pcm", "w");
+    fwrite(tx_buff, sizeof(int16_t), lenTX, file1);
     fclose(file1);
 
     //prepare fixed bytes in transmit buffer
@@ -164,7 +116,7 @@ int main(){
     size_t iteration_count = 5;
 
 
-    FILE *file2 = fopen("./pcm/txdata.pcm", "rw");
+    FILE *file2 = fopen("./pcm/rxdata.pcm", "wb");
 
     // Начинается работа с получением и отправкой сэмплов
     for (size_t buffers_read = 0; buffers_read < iteration_count; buffers_read++)
@@ -197,23 +149,6 @@ int main(){
         
 
     }
-    // Исправление: используйте двойные кавычки для строки режима
-
-
-    // Записываем данные в формате I Q (через пробел)
-
-    int buffR[5500];
-
-    fgets(buffR, sizeof(buffR), file2);
-
-    int lenR = sizeof(buffR) / sizeof(buffR[0]);
-
-    for (int i = 0; i < lenR; i++){
-        printf("%d ", buffR[i]);
-    }
-    putchar('\n');
-
-    printf("%d\n", lenR);
 
     free(result);
     fclose(file2);

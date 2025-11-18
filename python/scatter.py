@@ -2,36 +2,41 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-name = "../pcm/txdata.pcm"
+name = "../pcm/rxdata.pcm"
 
+start_point = 5 
 data = []
 imag = []
 real = []
 count = []
 counter = 0
+
+temp_real = []
+temp_imag = []
+
 with open(name, "rb") as f:
     index = 0
     while (byte := f.read(2)):
-        I = 0
-        Q = 0
-        if(index %2 == 0):
-            Q = int.from_bytes(byte, byteorder='little', signed=True)
-            real.append(Q)
-            counter += 1
-            count.append(counter)
-        else:
-            I = int.from_bytes(byte, byteorder='little', signed=True)
-            imag.append(I)
+        if (index - start_point) % 10 == 0:
+            if len(temp_real) == len(temp_imag):
+                I = int.from_bytes(byte, byteorder='little', signed=True)
+                temp_real.append(I)
+            else:
+                Q = int.from_bytes(byte, byteorder='little', signed=True)
+                temp_imag.append(Q)
+                counter += 1
+                count.append(counter)
         
         index += 1
 
+for i in range(min(len(temp_real), len(temp_imag))):
+    if abs(temp_real[i]) > 100 and abs(temp_imag[i]) > 100:
+        real.append(temp_real[i])
+        imag.append(temp_imag[i])
+
+
+print(len(real))
 plt.figure(figsize=(8, 8))
 plt.scatter(real, imag, alpha=0.5, s=10)  
-plt.title("IQ Constellation Diagram")
-plt.xlabel("In-phase (I)")
-plt.ylabel("Quadrature (Q)")
 plt.grid(True)
-plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
-plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
-plt.axis('equal')  
 plt.show()

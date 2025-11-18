@@ -1,4 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/main.dir/func/convolve.c.o"
+  "CMakeFiles/main.dir/func/convolve.c.o.d"
+  "CMakeFiles/main.dir/func/to_bpsk.c.o"
+  "CMakeFiles/main.dir/func/to_bpsk.c.o.d"
+  "CMakeFiles/main.dir/func/upsampling.c.o"
+  "CMakeFiles/main.dir/func/upsampling.c.o.d"
   "CMakeFiles/main.dir/main.c.o"
   "CMakeFiles/main.dir/main.c.o.d"
   "main"
