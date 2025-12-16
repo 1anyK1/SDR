@@ -129,78 +129,6 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
-func/convolve.o: func/convolve.c.o
-.PHONY : func/convolve.o
-
-# target to build an object file
-func/convolve.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/convolve.c.o
-.PHONY : func/convolve.c.o
-
-func/convolve.i: func/convolve.c.i
-.PHONY : func/convolve.i
-
-# target to preprocess a source file
-func/convolve.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/convolve.c.i
-.PHONY : func/convolve.c.i
-
-func/convolve.s: func/convolve.c.s
-.PHONY : func/convolve.s
-
-# target to generate assembly for a file
-func/convolve.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/convolve.c.s
-.PHONY : func/convolve.c.s
-
-func/to_bpsk.o: func/to_bpsk.c.o
-.PHONY : func/to_bpsk.o
-
-# target to build an object file
-func/to_bpsk.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/to_bpsk.c.o
-.PHONY : func/to_bpsk.c.o
-
-func/to_bpsk.i: func/to_bpsk.c.i
-.PHONY : func/to_bpsk.i
-
-# target to preprocess a source file
-func/to_bpsk.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/to_bpsk.c.i
-.PHONY : func/to_bpsk.c.i
-
-func/to_bpsk.s: func/to_bpsk.c.s
-.PHONY : func/to_bpsk.s
-
-# target to generate assembly for a file
-func/to_bpsk.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/to_bpsk.c.s
-.PHONY : func/to_bpsk.c.s
-
-func/upsampling.o: func/upsampling.c.o
-.PHONY : func/upsampling.o
-
-# target to build an object file
-func/upsampling.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/upsampling.c.o
-.PHONY : func/upsampling.c.o
-
-func/upsampling.i: func/upsampling.c.i
-.PHONY : func/upsampling.i
-
-# target to preprocess a source file
-func/upsampling.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/upsampling.c.i
-.PHONY : func/upsampling.c.i
-
-func/upsampling.s: func/upsampling.c.s
-.PHONY : func/upsampling.s
-
-# target to generate assembly for a file
-func/upsampling.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/func/upsampling.c.s
-.PHONY : func/upsampling.c.s
-
 main.o: main.c.o
 .PHONY : main.o
 
@@ -234,15 +162,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... main"
-	@echo "... func/convolve.o"
-	@echo "... func/convolve.i"
-	@echo "... func/convolve.s"
-	@echo "... func/to_bpsk.o"
-	@echo "... func/to_bpsk.i"
-	@echo "... func/to_bpsk.s"
-	@echo "... func/upsampling.o"
-	@echo "... func/upsampling.i"
-	@echo "... func/upsampling.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -8,9 +8,6 @@ find_package(SoapySDR REQUIRED)
 
 set(MAIN_SOURCE_FILES
     main.c
-    func/convolve.c
-    func/to_bpsk.c
-    func/upsampling.c
 )
 
 # Добавляем исполняемый файл
