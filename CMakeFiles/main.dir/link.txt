@@ -1,1 +1,1 @@
-/usr/bin/cc -g CMakeFiles/main.dir/main.c.o CMakeFiles/main.dir/func/convolve.c.o CMakeFiles/main.dir/func/to_bpsk.c.o CMakeFiles/main.dir/func/upsampling.c.o -o main  -Wl,-rpath,/usr/local/lib /usr/local/lib/libSoapySDR.so.0.8.1 -pthread 
+/usr/bin/cc -g CMakeFiles/main.dir/main.c.o -o main  -Wl,-rpath,/usr/local/lib /usr/local/lib/libSoapySDR.so.0.8.1 -pthread 
