@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 name = "../pcm/rxdata.pcm"
 
-start_point = 5 
+start_point = 3 
 data = []
 imag = []
 real = []
