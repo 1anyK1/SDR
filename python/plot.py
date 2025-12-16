@@ -41,7 +41,5 @@ plt.plot(count,(absIQ),color='purple')
 plt.show()
 
 name2 = np.convolve(real, np.ones(10))
-
-plt.figure(3)
-plt.plot(name2)
-plt.show()
+print(len(name2))
+name2.astype(np.int16).tofile("../pcm/final.pcm")
