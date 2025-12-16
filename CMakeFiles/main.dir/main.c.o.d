@@ -56,7 +56,7 @@ CMakeFiles/main.dir/main.c.o: /home/plutoSDR/BochZanSDR/dev/main.c \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h /usr/include/complex.h \
- /usr/include/x86_64-linux-gnu/bits/mathdef.h \
- /usr/include/x86_64-linux-gnu/bits/cmathcalls.h \
- /home/plutoSDR/BochZanSDR/dev/./include/bpsk.h
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/strings.h /home/plutoSDR/BochZanSDR/dev/./include/bpsk.h
