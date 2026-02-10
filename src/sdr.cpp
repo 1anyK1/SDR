@@ -1,68 +1,12 @@
-#include <SoapySDR/Device.h> 
-#include <SoapySDR/Formats.h>
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <stdint.h>
-#include <complex.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <string.h>
-#include <math.h>
+#include "./common.h"
 
-int *to_bpsk(int *bit_arr, int length) {
-    int *bpsk_arr = (int *)malloc(length * sizeof(int));
-    for(int i = 0; i < length; i++) {
-        if(bit_arr[i] == 0) {
-            bpsk_arr[i] = 1;
-        } else {
-            bpsk_arr[i] = -1;
-        }
-    }
-    return bpsk_arr;
-}
+int sdr_run(int argc, char *argv[]){
 
-int *upsampling(int *bpsk_arr, int length) {
-    int count = 0;
-    int *bpsk_after_upsampling = (int *)malloc(length * 10 * sizeof(int));
-    
-    for(int i = 0; i < length; i++) {
-        if (i > 0) {
-            for(int j = 0; j < 9; j++) {
-                bpsk_after_upsampling[count] = 0;
-                count++;
-            }
-        }
-        bpsk_after_upsampling[count] = bpsk_arr[i];
-        count++;
-    }
-    return bpsk_after_upsampling;
-}
-
-int *convolution(int *upsampling_arr, int *impulse_arr, int length, int impulse_length) {
-    int result_length = length;
-    int *upsampl_after_conv = (int *)malloc(result_length * sizeof(int));
-    
-    for (int i = 0; i < result_length; i++) {
-        upsampl_after_conv[i] = 0;
-    }
-    
-    for (int n = 0; n < result_length; n++) {
-        for (int k = 0; k < impulse_length; k++) {
-            if (n - k >= 0 && n - k < length) {
-                upsampl_after_conv[n] += upsampling_arr[n - k] * impulse_arr[k];
-            }
-        }
-    }
-    
-    return upsampl_after_conv;
-}
-
-int main(int argc, char* argv[]) {
     if (argc < 3) {
         printf("Использовать uri(SoapySDRUtil --find): %s <usb:tx_uri> <usb:rx_uri>\n", argv[0]);
         return EXIT_FAILURE;
-    }
-    
+    }    
+
     char *tx_uri = argv[1];
     char *rx_uri = argv[2];
     
@@ -162,11 +106,12 @@ int main(int argc, char* argv[]) {
     SoapySDRDevice_setFrequency(rx_sdr, SOAPY_SDR_RX, 0, carrier_freq, NULL);
 
     // Инициализация количества каналов
+    const size_t channels_count = 0;
     size_t channels[] = {0};
     
     // Настройки усилителей
-    SoapySDRDevice_setGain(tx_sdr, SOAPY_SDR_TX, channels, -30.0);
-    SoapySDRDevice_setGain(rx_sdr, SOAPY_SDR_RX, channels, 25.0);
+    SoapySDRDevice_setGain(tx_sdr, SOAPY_SDR_TX, channels_count, -30.0);
+    SoapySDRDevice_setGain(rx_sdr, SOAPY_SDR_RX, channels_count, 25.0);
 
     const size_t channel_count = 1;
     
@@ -232,53 +177,83 @@ int main(int argc, char* argv[]) {
         printf("Got timestamp for sync: %lld\n", timeNs);
     }
 
-    while (total_samples_sent < conv_length) {
-        int samples_to_send = (conv_length - total_samples_sent < tx_mtu) ? 
-                             (conv_length - total_samples_sent) : tx_mtu;
-
-        // Копируем сэмплы в tx_buff
-        for (int i = 0; i < samples_to_send * 2; i++) {
-            tx_buff[i] = tx_samples[total_samples_sent * 2 + i] * 1500 << 4;
-        }
-
-        for (int i = samples_to_send * 2; i < tx_mtu * 2; i++) {
-            tx_buff[i] = 0;
-        }
-
-        void *tx_buffs[] = {tx_buff};
-        int st = SoapySDRDevice_writeStream(tx_sdr, txStream, (const void * const*)tx_buffs, tx_mtu, &flags, tx_time, timeoutUs);
+    while(1){
+        // ---- СБРОС ПАРАМЕТРОВ ДЛЯ НОВОЙ ИТЕРАЦИИ ----
+        total_samples_sent = 0;
+        int flags = SOAPY_SDR_HAS_TIME;
+        long long tx_time = 0;
         
-        if (st < 0) {
-            printf("TX Failed: %i\n", st);
-            break;
-        }
+        // ---- ПОЛУЧАЕМ ТЕКУЩЕЕ ВРЕМЯ ДЛЯ СИНХРОНИЗАЦИИ ----
+        void *sync_buffs[] = {rx_buffer};
+        int sync_flags;
+        long long sync_time;
+        int sync_result = SoapySDRDevice_readStream(rx_sdr, rxStream, sync_buffs, 1, 
+                                                &sync_flags, &sync_time, 10000);
         
-        total_samples_sent += samples_to_send;
-        tx_time += (samples_to_send * 1000000000LL) / sample_rate;
-        
-        printf("Sent %d samples, total: %d/%d\n", samples_to_send, total_samples_sent, conv_length);
-    }
-
-    printf("Transmission completed. Total samples sent: %d\n", total_samples_sent);
-
-    printf("Starting reception...\n");
-    size_t iteration_count = 10;
-    for (size_t buffers_read = 0; buffers_read < iteration_count; buffers_read++) {
-        void *rx_buffs[] = {rx_buffer};
-        int flags;
-        long long timeNs;
-        
-        int sr = SoapySDRDevice_readStream(rx_sdr, rxStream, rx_buffs, rx_mtu, &flags, &timeNs, timeoutUs);
-
-        if (sr > 0) {
-            fwrite(rx_buffer, sr * 2 * sizeof(int16_t), 1, fptr);
-            printf("Received buffer %lu: %d samples\n", buffers_read, sr);
+        if (sync_result > 0) {
+            tx_time = sync_time + 10000000;  // +10 мс в будущее
+            printf("Sync timestamp: %lld\n", sync_time);
         } else {
-            printf("RX Failed: %i\n", sr);
+            // Если не получили время, используем относительное
+            printf("No sync timestamp, using relative timing\n");
         }
-    }
 
-    printf("Reception completed\n");
+        printf("Starting transmission...\n");
+        while (total_samples_sent < conv_length) {
+            int samples_to_send = (conv_length - total_samples_sent < tx_mtu) ? 
+                                (conv_length - total_samples_sent) : tx_mtu;
+
+            // Копируем сэмплы в tx_buff
+            for (int i = 0; i < samples_to_send * 2; i++) {
+                tx_buff[i] = tx_samples[total_samples_sent * 2 + i] * 1500 << 4;
+            }
+
+            // Очищаем остаток буфера
+            for (int i = samples_to_send * 2; i < tx_mtu * 2; i++) {
+                tx_buff[i] = 0;
+            }
+
+            void *tx_buffs[] = {tx_buff};
+            int st = SoapySDRDevice_writeStream(tx_sdr, txStream, (const void * const*)tx_buffs, 
+                                            tx_mtu, &flags, tx_time, timeoutUs);
+            
+            if (st < 0) {
+                printf("TX Failed: %i\n", st);
+                break;
+            }
+            
+            total_samples_sent += samples_to_send;
+            tx_time += (samples_to_send * 1000000000LL) / sample_rate;
+            
+            printf("Sent %d samples, total: %d/%d\n", samples_to_send, total_samples_sent, conv_length);
+        }
+
+        printf("Transmission completed. Total samples sent: %d\n", total_samples_sent);
+
+
+        printf("Starting reception...\n");
+        size_t iteration_count = 10;
+        for (size_t buffers_read = 0; buffers_read < iteration_count; buffers_read++) {
+            void *rx_buffs[] = {rx_buffer};
+            int rx_flags;
+            long long timeNs;
+            
+            int sr = SoapySDRDevice_readStream(rx_sdr, rxStream, rx_buffs, rx_mtu, 
+                                            &rx_flags, &timeNs, timeoutUs);
+
+            if (sr > 0) {
+                fwrite(rx_buffer, sr * 2 * sizeof(int16_t), 1, fptr);
+                fflush(fptr);  // Сбрасываем на диск
+                g_sdr_data.update_samples(rx_buffer, sr);
+                printf("Received buffer %lu: %d samples\n", buffers_read, sr);
+            } else {
+                printf("RX Failed: %i\n", sr);
+            }
+        }
+
+        printf("Reception completed\n");
+        
+    }
 
     fclose(fptr);
     free(tx_buff);
@@ -296,4 +271,5 @@ int main(int argc, char* argv[]) {
     SoapySDRDevice_unmake(rx_sdr);
 
     return EXIT_SUCCESS;
+
 }

@@ -1,11 +1,17 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/main.dir/main.c.o"
-  "CMakeFiles/main.dir/main.c.o.d"
+  "CMakeFiles/main.dir/src/bpsk.cpp.o"
+  "CMakeFiles/main.dir/src/bpsk.cpp.o.d"
+  "CMakeFiles/main.dir/src/gui.cpp.o"
+  "CMakeFiles/main.dir/src/gui.cpp.o.d"
+  "CMakeFiles/main.dir/src/main.cpp.o"
+  "CMakeFiles/main.dir/src/main.cpp.o.d"
+  "CMakeFiles/main.dir/src/sdr.cpp.o"
+  "CMakeFiles/main.dir/src/sdr.cpp.o.d"
   "main"
   "main.pdb"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang C)
+foreach(lang CXX)
   include(CMakeFiles/main.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()
