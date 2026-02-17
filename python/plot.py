@@ -32,7 +32,7 @@ with open(name, "rb") as f:
         
 
 plt.figure(1)
-plt.plot(count,(imag),color='red')
+plt.plot(count,(imag),color='red') 
 plt.plot(count,(real), color='blue')  
 plt.show()
 
