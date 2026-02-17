@@ -1,5 +1,8 @@
 #include "./common.h"
 #include <algorithm>
+#include <deque>
+
+
 
 SDRData g_sdr_data;
 
@@ -20,11 +23,15 @@ void run_gui() {
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    std::vector<float> display_i, display_q, display_time;
-    std::vector<float> display_mag, display_phase;
+    // Используем кольцевой буфер или дек для хранения истории
+    const size_t max_display_points = 5000; // Максимальное количество отображаемых точек
+    std::deque<float> display_i, display_q;
+    std::deque<float> display_mag, display_phase;
     std::vector<float> constellation_i, constellation_q;
-
-    size_t max_display_points = 2000;
+    
+    // Счетчик сэмплов для оси X
+    uint64_t sample_counter = 0;
+    
     bool auto_scale = true;
     float scale_min = -10000.0f, scale_max = 10000.0f;
 
@@ -51,56 +58,69 @@ void run_gui() {
             size_t num_iq_pairs = samples.size() / 2;
             
             if (num_iq_pairs > 0) {
-                display_i.clear();
-                display_q.clear();
-                display_time.clear();
-                display_mag.clear();
-                display_phase.clear();
+                // Очищаем constellation для обновления
                 constellation_i.clear();
                 constellation_q.clear();
-
-                size_t step = 1;
-                if (num_iq_pairs > max_display_points) {
-                    step = num_iq_pairs / max_display_points;
-                }
 
                 stats.total_samples = num_iq_pairs;
                 stats.max_i = 0; stats.max_q = 0;
                 stats.avg_i = 0; stats.avg_q = 0;
                 stats.rms = 0;
                 
-                size_t display_count = 0;
+                size_t processed_pairs = 0;
                 
-                for (size_t i = 0; i < num_iq_pairs; i += step) {
+                // Обрабатываем все новые сэмплы
+                for (size_t i = 0; i < num_iq_pairs; i++) {
                     float i_val = static_cast<float>(samples[i * 2]);
                     float q_val = static_cast<float>(samples[i * 2 + 1]);
                     
+                    // Добавляем новые точки с порядковым номером сэмпла
                     display_i.push_back(i_val);
                     display_q.push_back(q_val);
-                    display_time.push_back(static_cast<float>(i));
                     
                     float mag = std::sqrt(i_val*i_val + q_val*q_val);
                     float phase = std::atan2(q_val, i_val);
                     display_mag.push_back(mag);
                     display_phase.push_back(phase);
 
-                    if (i % 5 == 0 && constellation_i.size() < 1000) {
+                    // Обновляем constellation (берем каждую 5-ю точку для уменьшения нагрузки)
+                    if (i % 5 == 0) {
                         constellation_i.push_back(i_val);
                         constellation_q.push_back(q_val);
                     }
                     
+                    // Обновляем статистику
                     stats.max_i = std::max(stats.max_i, std::abs(i_val));
                     stats.max_q = std::max(stats.max_q, std::abs(q_val));
                     stats.avg_i += i_val;
                     stats.avg_q += q_val;
                     stats.rms += (i_val*i_val + q_val*q_val);
-                    display_count++;
+                    processed_pairs++;
+                    
+                    // Увеличиваем счетчик сэмплов
+                    sample_counter++;
                 }
 
-                if (display_count > 0) {
-                    stats.avg_i /= display_count;
-                    stats.avg_q /= display_count;
-                    stats.rms = std::sqrt(stats.rms / display_count);
+                // Удаляем старые точки, если превышен лимит
+                while (display_i.size() > max_display_points) {
+                    display_i.pop_front();
+                    display_q.pop_front();
+                    display_mag.pop_front();
+                    display_phase.pop_front();
+                }
+
+                // Ограничиваем размер constellation для производительности
+                if (constellation_i.size() > 2000) {
+                    constellation_i.erase(constellation_i.begin(), 
+                                         constellation_i.begin() + (constellation_i.size() - 2000));
+                    constellation_q.erase(constellation_q.begin(), 
+                                         constellation_q.begin() + (constellation_q.size() - 2000));
+                }
+
+                if (processed_pairs > 0) {
+                    stats.avg_i /= processed_pairs;
+                    stats.avg_q /= processed_pairs;
+                    stats.rms = std::sqrt(stats.rms / processed_pairs);
 
                     if (auto_scale && !display_i.empty()) {
                         auto [min_i, max_i] = std::minmax_element(display_i.begin(), display_i.end());
@@ -124,27 +144,44 @@ void run_gui() {
         {
             ImGui::Begin("I/Q Signal Plots");
             
-            if (ImPlot::BeginPlot("I and Q Channels", ImVec2(-1, 300))) {
+            if (ImPlot::BeginPlot("I and Q Channels (Sample Index)", ImVec2(-1, 300))) {
                 ImPlot::SetupAxes("Sample Index", "Amplitude");
-                ImPlot::SetupAxisLimits(ImAxis_Y1, scale_min, scale_max, ImGuiCond_Always);
+                
+                // Устанавливаем пределы оси X для отображения последних данных
+                if (!display_i.empty()) {
+                    float x_min = static_cast<float>(sample_counter - display_i.size());
+                    float x_max = static_cast<float>(sample_counter - 1);
+                    ImPlot::SetupAxisLimits(ImAxis_X1, x_min, x_max, ImGuiCond_Always);
+                }
                 
                 if (!display_i.empty()) {
+                    // Создаем вектор индексов сэмплов для оси X
+                    std::vector<float> sample_indices(display_i.size());
+                    uint64_t start_index = sample_counter - display_i.size();
+                    for (size_t i = 0; i < display_i.size(); i++) {
+                        sample_indices[i] = static_cast<float>(start_index + i);
+                    }
+                    
+                    std::vector<float> i_vec(display_i.begin(), display_i.end());
+                    std::vector<float> q_vec(display_q.begin(), display_q.end());
+                    
                     ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.5f, 0.0f, 1.0f)); // Оранжевый для I
-                    ImPlot::PlotLine("I Channel", display_time.data(), display_i.data(), display_i.size());
+                    ImPlot::PlotLine("I Channel", sample_indices.data(), i_vec.data(), i_vec.size());
                     
                     ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.8f, 1.0f, 1.0f)); // Голубой для Q
-                    ImPlot::PlotLine("Q Channel", display_time.data(), display_q.data(), display_q.size());
+                    ImPlot::PlotLine("Q Channel", sample_indices.data(), q_vec.data(), q_vec.size());
                 }
                 
                 ImPlot::EndPlot();
             }
+            
             ImGui::End();
         }
 
         {
             ImGui::Begin("Constellation Diagram");
             
-            if (ImPlot::BeginPlot("IQ Constellation", ImVec2(-1, 400))) {
+            if (ImPlot::BeginPlot("IQ Constellation", ImVec2(-1, 300))) {
                 ImPlot::SetupAxes("I (In-phase)", "Q (Quadrature)");
                 ImPlot::SetupAxisLimits(ImAxis_X1, scale_min, scale_max);
                 ImPlot::SetupAxisLimits(ImAxis_Y1, scale_min, scale_max);

@@ -859,7 +859,10 @@ CMakeFiles/main.dir/src/gui.cpp.o: src/gui.cpp \
   /usr/include/c++/11/bits/node_handle.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /usr/include/c++/11/pstl/execution_defs.h
+  /usr/include/c++/11/pstl/execution_defs.h \
+  /usr/include/c++/11/deque \
+  /usr/include/c++/11/bits/stl_deque.h \
+  /usr/include/c++/11/bits/deque.tcc
 
 CMakeFiles/main.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/stdc-predef.h \
@@ -1706,6 +1709,10 @@ CMakeFiles/main.dir/src/sdr.cpp.o: src/sdr.cpp \
 
 src/sdr.cpp:
 
+/usr/include/c++/11/bits/deque.tcc:
+
+/usr/include/c++/11/deque:
+
 /usr/include/c++/11/bits/hashtable_policy.h:
 
 /usr/include/c++/11/unordered_map:
@@ -2123,6 +2130,8 @@ third_party/imgui/imgui.h:
 /usr/include/c++/11/pstl/pstl_config.h:
 
 /usr/include/inttypes.h:
+
+/usr/include/c++/11/bits/stl_deque.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 

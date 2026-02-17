@@ -173,17 +173,15 @@ int sdr_run(int argc, char *argv[]){
     long long timeNs;
     int sr = SoapySDRDevice_readStream(rx_sdr, rxStream, rx_buffs, rx_mtu, &rx_flags, &timeNs, timeoutUs);
     if (sr > 0) {
-        tx_time = timeNs + (4 * 1000 * 1000); // на 4 мс в будущее
+        tx_time = timeNs + (4 * 1000 * 1000);
         printf("Got timestamp for sync: %lld\n", timeNs);
     }
 
     while(1){
-        // ---- СБРОС ПАРАМЕТРОВ ДЛЯ НОВОЙ ИТЕРАЦИИ ----
         total_samples_sent = 0;
         int flags = SOAPY_SDR_HAS_TIME;
         long long tx_time = 0;
-        
-        // ---- ПОЛУЧАЕМ ТЕКУЩЕЕ ВРЕМЯ ДЛЯ СИНХРОНИЗАЦИИ ----
+
         void *sync_buffs[] = {rx_buffer};
         int sync_flags;
         long long sync_time;
@@ -191,10 +189,9 @@ int sdr_run(int argc, char *argv[]){
                                                 &sync_flags, &sync_time, 10000);
         
         if (sync_result > 0) {
-            tx_time = sync_time + 10000000;  // +10 мс в будущее
+            tx_time = sync_time + 10000000;  
             printf("Sync timestamp: %lld\n", sync_time);
         } else {
-            // Если не получили время, используем относительное
             printf("No sync timestamp, using relative timing\n");
         }
 
@@ -203,12 +200,10 @@ int sdr_run(int argc, char *argv[]){
             int samples_to_send = (conv_length - total_samples_sent < tx_mtu) ? 
                                 (conv_length - total_samples_sent) : tx_mtu;
 
-            // Копируем сэмплы в tx_buff
             for (int i = 0; i < samples_to_send * 2; i++) {
                 tx_buff[i] = tx_samples[total_samples_sent * 2 + i] * 1500 << 4;
             }
 
-            // Очищаем остаток буфера
             for (int i = samples_to_send * 2; i < tx_mtu * 2; i++) {
                 tx_buff[i] = 0;
             }
@@ -226,7 +221,9 @@ int sdr_run(int argc, char *argv[]){
             tx_time += (samples_to_send * 1000000000LL) / sample_rate;
             
             printf("Sent %d samples, total: %d/%d\n", samples_to_send, total_samples_sent, conv_length);
+
         }
+        
 
         printf("Transmission completed. Total samples sent: %d\n", total_samples_sent);
 
@@ -243,7 +240,7 @@ int sdr_run(int argc, char *argv[]){
 
             if (sr > 0) {
                 fwrite(rx_buffer, sr * 2 * sizeof(int16_t), 1, fptr);
-                fflush(fptr);  // Сбрасываем на диск
+                fflush(fptr); 
                 g_sdr_data.update_samples(rx_buffer, sr);
                 printf("Received buffer %lu: %d samples\n", buffers_read, sr);
             } else {
