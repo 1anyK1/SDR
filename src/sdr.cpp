@@ -175,7 +175,7 @@ int sdr_run(int argc, char *argv[]) {
     }
 
     FILE *rx_file = nullptr;
-    if (is_rx) rx_file = fopen("rx.pcm", "wb");
+    if (is_rx) rx_file = fopen("./pcm/rxdata.pcm", "wb");
 
     const long timeoutUs = 400000;
     size_t sample_offset = 0;
