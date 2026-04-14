@@ -29,21 +29,24 @@ int *upsampling(int *bpsk_arr, int length) {
     return bpsk_after_upsampling;
 }
 
-int *convolution(int *upsampling_arr, int *impulse_arr, int length, int impulse_length) {
-    int result_length = length;
-    int *upsampl_after_conv = (int *)malloc(result_length * sizeof(int));
-    
-    for (int i = 0; i < result_length; i++) {
-        upsampl_after_conv[i] = 0;
-    }
-    
+int *convolution(int *upsampling_arr, int *impulse_arr,
+                 int length, int impulse_length)
+{
+    int result_length = length + impulse_length - 1;
+
+    int *result = (int *)malloc(result_length * sizeof(int));
+    if (!result) return NULL;
+
+    for (int i = 0; i < result_length; i++)
+        result[i] = 0;
+
     for (int n = 0; n < result_length; n++) {
         for (int k = 0; k < impulse_length; k++) {
             if (n - k >= 0 && n - k < length) {
-                upsampl_after_conv[n] += upsampling_arr[n - k] * impulse_arr[k];
+                result[n] += upsampling_arr[n - k] * impulse_arr[k];
             }
         }
     }
-    
-    return upsampl_after_conv;
+
+    return result;
 }

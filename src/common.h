@@ -64,4 +64,7 @@ struct SDRData {
 
 extern SDRData g_sdr_data;
 
+std::vector<int> ted(std::vector<std::complex<double>> &matched, int samples_per_symbol);
+std::vector<std::complex<double>> symbol_sync(std::vector<std::complex<double>> &matched, int nsps);
+
 #endif // COMMON_H

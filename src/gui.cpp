@@ -188,7 +188,7 @@ void run_gui() {
                 
                 if (!constellation_i.empty()) {
                     ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle, 3, 
-                        ImVec4(0.0f, 1.0f, 0.0f, 0.5f), IMPLOT_AUTO, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
+                        ImVec4(0.8f, 0.2f, 1.0f, 1.0f), IMPLOT_AUTO, ImVec4(0.8f, 0.2f, 1.0f, 1.0f));
                     ImPlot::PlotScatter("IQ Points", constellation_i.data(), constellation_q.data(), 
                                        constellation_i.size());
                 }

@@ -251,6 +251,30 @@ src/sdr.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sdr.cpp.s
 .PHONY : src/sdr.cpp.s
 
+src/sync.o: src/sync.cpp.o
+.PHONY : src/sync.o
+
+# target to build an object file
+src/sync.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sync.cpp.o
+.PHONY : src/sync.cpp.o
+
+src/sync.i: src/sync.cpp.i
+.PHONY : src/sync.i
+
+# target to preprocess a source file
+src/sync.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sync.cpp.i
+.PHONY : src/sync.cpp.i
+
+src/sync.s: src/sync.cpp.s
+.PHONY : src/sync.s
+
+# target to generate assembly for a file
+src/sync.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sync.cpp.s
+.PHONY : src/sync.cpp.s
+
 third_party/imgui/backends/imgui_impl_opengl3.o: third_party/imgui/backends/imgui_impl_opengl3.cpp.o
 .PHONY : third_party/imgui/backends/imgui_impl_opengl3.o
 
@@ -514,6 +538,9 @@ help:
 	@echo "... src/sdr.o"
 	@echo "... src/sdr.i"
 	@echo "... src/sdr.s"
+	@echo "... src/sync.o"
+	@echo "... src/sync.i"
+	@echo "... src/sync.s"
 	@echo "... third_party/imgui/backends/imgui_impl_opengl3.o"
 	@echo "... third_party/imgui/backends/imgui_impl_opengl3.i"
 	@echo "... third_party/imgui/backends/imgui_impl_opengl3.s"

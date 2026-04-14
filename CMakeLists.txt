@@ -44,5 +44,6 @@ target_compile_options(implot PRIVATE -fPIC)
 add_executable(main ${SRC_DIR}/main.cpp 
                     ${SRC_DIR}/gui.cpp
                     ${SRC_DIR}/bpsk.cpp
-                    ${SRC_DIR}/sdr.cpp)
+                    ${SRC_DIR}/sdr.cpp
+                    ${SRC_DIR}/sync.cpp)
 target_link_libraries(main PRIVATE imgui implot ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SoapySDR_LIBRARIES})

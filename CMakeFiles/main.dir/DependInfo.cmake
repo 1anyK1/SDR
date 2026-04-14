@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/plutoSDR/BochZanSDR/dev/src/gui.cpp" "CMakeFiles/main.dir/src/gui.cpp.o" "gcc" "CMakeFiles/main.dir/src/gui.cpp.o.d"
   "/home/plutoSDR/BochZanSDR/dev/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
   "/home/plutoSDR/BochZanSDR/dev/src/sdr.cpp" "CMakeFiles/main.dir/src/sdr.cpp.o" "gcc" "CMakeFiles/main.dir/src/sdr.cpp.o.d"
+  "/home/plutoSDR/BochZanSDR/dev/src/sync.cpp" "CMakeFiles/main.dir/src/sync.cpp.o" "gcc" "CMakeFiles/main.dir/src/sync.cpp.o.d"
   )
 
 # Targets to which this target links.
